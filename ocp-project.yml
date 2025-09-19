@@ -1,7 +1,6 @@
 - name: create project
   hosts: all
   gather_facts: no
-  ansible_python_interpreter: "/usr/libexec/platform-python"
   tasks:
     - name: Create a k8s namespace
       kubernetes.core.k8s:
