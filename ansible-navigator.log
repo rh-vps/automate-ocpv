@@ -1,0 +1,9 @@
+2025-09-19T07:31:22.368433+00:00 WARNING 'ansible_navigator.image_manager.puller._log_message' Image inspection failed, image assumed to be corrupted or missing
+2025-09-19T07:31:22.375837+00:00 WARNING 'ansible_navigator.image_manager.puller._log_message' stdout: 
+2025-09-19T07:31:22.376139+00:00 WARNING 'ansible_navigator.image_manager.puller._log_message' stderr: time="2025-09-19T13:01:22+05:30" level=warning msg="RunRoot is pointing to a path (/run/user/1001/containers) which is not writable. Most likely podman will fail."
+Error: default OCI runtime "crun" not found: invalid argument
+
+2025-09-19T07:31:22.528626+00:00 ERROR 'ansible_navigator.image_manager.puller._log_message' Execution environment pull failed
+2025-09-19T07:31:22.920227+00:00 ERROR 'ansible_navigator.actions.collections._run_runner' [33mWARN[0m[0000] RunRoot is pointing to a path (/run/user/1001/containers) which is not writable. Most likely podman will fail. 
+Error: default OCI runtime "crun" not found: invalid argument
+
