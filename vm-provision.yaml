@@ -1,18 +1,6 @@
 - name: Create a Virtual Machine in OpenShift
   hosts: all
   gather_facts: false
-  vars:
-    vm_name: aap-ocp-vm
-    project_name: automate-ocp
-    template_name: rhel8-server-small
-    cpu: 2000m
-    memory: 8Gi
-    disk_size: 40Gi
-    pvc_name: rhel9-client1
-    root_password: 'Test123$'
-    sudo_user: 'admin'
-    sudo_password: 'admin@123'
-    hostname: 'abc.vpslab.com'
   tasks:
     - name: Create VM by cloning an existing PVC
       kubernetes.core.k8s:
@@ -54,16 +42,17 @@
                     cloudInitNoCloud:
                       userData: |
                         #cloud-config
-                        hostname: "{{ hostname }}"
-                        password: "{{ root_password }}"
+                        hostname: "{{ vm_name }}.{{ base_domain }}"
+                        user: "{{ username }}"
+                        password: "{{ password }}"
                         chpasswd: '{ expire: False }'
                         ssh_pwauth: True
                         users:
-                          - name: "{{ sudo_user }}"
+                          - name: admin
                             sudo: "['ALL=(ALL) NOPASSWD:ALL']"
                             groups: sudo
                             shell: /bin/bash
-                            passwd: "{{ sudo_password | password_hash('sha512') }}"
+                            passwd: 'admin@123'
             dataVolumeTemplates:
               - metadata:
                   name: "{{ vm_name }}-c"
