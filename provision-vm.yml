@@ -48,7 +48,7 @@
                       memory: "{{ memory }}"
                 volumes:
                   - dataVolume:
-                      name: favorite-clone
+                      name: disk-c
                     name: root-disk
                   - name: cloudinitdisk
                     cloudInitNoCloud:
