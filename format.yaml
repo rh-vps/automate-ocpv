@@ -1,0 +1,40 @@
+---
+- name: Create a Virtual Machine in OpenShift
+  hosts: all
+  become: true
+  become_user: root
+  gather_facts: false
+  tasks:
+    - name: Gather disk facts
+      ansible.builtin.setup:
+        gather_subset:
+          - hardware
+    - name: Find raw disks (no partitions, no fs)
+      set_fact:
+        raw_disks: >-
+          {{
+            ansible_devices
+            | dict2items
+            | selectattr('value.partitions', 'equalto', {})
+            | map(attribute='key')
+            | list
+          }}
+
+    - name: Show unused disks
+      debug:
+        var: raw_disks
+    - name: Partition each raw disk
+      community.general.parted:
+        device: "/dev/{{ item }}"
+        number: 1
+        state: present
+        label: gpt
+        name: new
+        part_type: primary
+        fs_type: xfs
+      loop: "{{ raw_disks }}"
+    - name: Create filesystem only if none exists
+      community.general.filesystem:
+        dev: /dev/vdc1
+      #      ansible.builtin.command: 'mkfs.xfs "/dev/{{ item }}1"'
+      #      loop: "{{ raw_disks }}"
