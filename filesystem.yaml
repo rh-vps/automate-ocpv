@@ -1,0 +1,11 @@
+---
+- name: Create a Virtual Machine in OpenShift
+  hosts: all
+  become: true
+  become_user: root
+  gather_facts: false
+  tasks:
+    - name: Create a xfs filesystem
+      community.general.filesystem:
+        fstype: xfs
+        dev: /dev/vdc1
