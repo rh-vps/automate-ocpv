@@ -1,0 +1,11 @@
+- name: Create a Virtual Machine in OpenShift
+  hosts: all
+  gather_facts: false
+  vars:
+    vm_name: vm1
+    disk_name: additional-disk
+    ns: automate-ocp
+  tasks:
+    - name: Hot-plug disk to running VM by using virtctl
+      ansible.builtin.command: virtctl addvolume {{ vm_name }} --volume-name={{ disk_name }} --persist -n {{ ns }} --kubeconfig /home/vpsadmin/aap/auth/kubeconfig
+      delegate_to: 192.168.128.113
