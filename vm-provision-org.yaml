@@ -45,6 +45,13 @@
                         user: "{{ username }}"
                         password: "{{ password }}"
                         chpasswd: '{ expire: False }'
+                        ssh_pwauth: True
+                        users:
+                          - name: admin
+                            sudo: "['ALL=(ALL) NOPASSWD:ALL']"
+                            groups: sudo
+                            shell: /bin/bash
+                            passwd: 'admin@123'
             dataVolumeTemplates:
               - metadata:
                   name: "{{ vm_name }}-c"
