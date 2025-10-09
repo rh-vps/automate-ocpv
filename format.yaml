@@ -36,5 +36,5 @@
     - name: Create filesystem only if none exists
       community.general.filesystem:
         dev: /dev/vdc1
-      #      ansible.builtin.command: 'mkfs.xfs "/dev/{{ item }}1"'
-      #      loop: "{{ raw_disks }}"
+      ansible.builtin.command: 'mkfs.xfs "/dev/{{ item }}1"'
+      loop: "{{ raw_disks }}"
