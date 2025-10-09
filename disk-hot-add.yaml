@@ -7,6 +7,6 @@
     ns: vms
   tasks:
     - name: Hot-plug disk to running VM by using virtctl
-      ansible.builtin.command: virtctl addvolume {{ vm_name }} --volume-name={{ disk_name }} --persist -n {{ ns }} --kubeconfig auth/kubeconfig
+      ansible.builtin.command: virtctl addvolume {{ vm_name }} --volume-name={{ disk_name }} --persist -n {{ ns }} --kubeconfig auth/kubeconfig-mc2
       delegate_to: 192.168.128.113
 
