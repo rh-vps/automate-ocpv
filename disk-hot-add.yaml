@@ -1,8 +1,7 @@
 - name: Create a Virtual Machine in OpenShift
   gather_facts: false
-  hosts: localhost
+  hosts: all
   vars:
-    ansible_connection: local
     vm_name: vm1
     disk_name: additional-disk
     ns: vms
