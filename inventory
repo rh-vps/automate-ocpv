@@ -1,0 +1,4 @@
+[hosts]
+192.168.128.113 ansible_user=vpsadmin ansible_password=Test123$
+#192.168.128.3 ansible_user=cloud-user ansible_password=fq2b-08eo-cru2
+

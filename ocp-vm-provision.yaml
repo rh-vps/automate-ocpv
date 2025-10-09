@@ -1,0 +1,81 @@
+- name: Create a Virtual Machine in OpenShift
+  hosts: all
+  gather_facts: false
+  vars:
+    vm_name: vm1
+    project_name: automate-ocp
+    template_name: rhel8-server-small
+    cpu: 2000m
+    memory: 8Gi
+    disk_size: 40Gi
+    pvc_name: rhel9-osdisk
+    root_password: 'Test123$'
+    sudo_user: 'admin'
+    sudo_password: 'admin@123'
+    hostname: 'vm1.vpslab.com'
+  tasks:
+    - name: Create VM by cloning an existing PVC
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: kubevirt.io/v1
+          kind: VirtualMachine
+          metadata:
+            labels:
+              kubevirt.io/vm: "{{ template_name }}"
+            name: "{{ vm_name }}"
+            namespace: "{{ project_name }}"
+          spec:
+            running: true
+            template:
+              metadata:
+                labels:
+                  kubevirt.io/vm: "{{ template_name }}"
+              spec:
+                domain:
+                  devices:
+                    disks:
+                      - name: root-disk
+                        disk:
+                          bus: virtio
+                        name: root-disk
+                      - name: cloudinitdisk
+                        disk:
+                          bus: virtio
+                  resources:
+                    requests:
+                      cpu: "{{ cpu }}"
+                      memory: "{{ memory }}"
+                volumes:
+                  - dataVolume:
+                      name: disk-c
+                    name: root-disk
+                  - name: cloudinitdisk
+                    cloudInitNoCloud:
+                      userData: |
+                        #cloud-config
+                        hostname: "{{ hostname }}"
+                        password: "{{ root_password }}"
+                        chpasswd: '{ expire: False }'
+                        ssh_pwauth: True
+                        users:
+                          - name: "{{ sudo_user }}"
+                            sudo: "['ALL=(ALL) NOPASSWD:ALL']"
+                            groups: sudo
+                            shell: /bin/bash
+                            passwd: "{{ sudo_password | password_hash('sha512') }}"
+            dataVolumeTemplates:
+              - metadata:
+                  name: disk-c
+                spec:
+                  storage:
+                    accessModes:
+                      - ReadWriteOnce
+                    resources:
+                      requests:
+                        storage: "{{ disk_size }}"
+                  source:
+                    pvc:
+                      namespace: "{{ project_name }}"
+                      name: "{{ pvc_name }}"
+                        #      delegate_to: localhost
