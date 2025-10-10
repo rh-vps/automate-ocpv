@@ -4,6 +4,7 @@
   become: true
   become_user: root
   gather_facts: false
+  ignore_errors: true
   tasks:
     - name: Gather disk facts
       ansible.builtin.setup:
